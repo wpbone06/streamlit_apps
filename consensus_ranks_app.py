@@ -27,57 +27,53 @@ def plot_rank_changes(df, players):
 def main():
     st.title("Player Rank Change Analyzer")
 
-    # Upload the CSV file
-    st.sidebar.header("Upload CSV")
-    csv_file = st.sidebar.file_uploader("Upload CSV file", type=["csv"])
+    # Get the path to the player CSV file
+    csv_file_path = "daily_consensus_ranks_2023-07-112023-07-23.csv"
 
-    if csv_file is not None:
-        # Read the CSV file into a DataFrame
-        df = pd.read_csv(csv_file)
+    # Read the CSV file into a DataFrame
+    try:
+        df = pd.read_csv(csv_file_path)
 
-        # Display the DataFrame
-        st.header("Player Rank Data")
-        st.write(df)
+    except Exception as e:
+        st.error(f"Error: {e}")
+        return
 
-        # Get unique days from the DataFrame
-        unique_days = df['Date'].unique()
+    # Display the DataFrame
+    st.header("Player Rank Data")
+    st.write(df)
 
-        # Select two days for rank comparison
-        st.sidebar.header("Select Days")
-        selected_days = st.sidebar.multiselect("Select two days", unique_days)
+    # Get unique days from the DataFrame
+    unique_days = df['Date'].unique()
 
-        if len(selected_days) == 2:
-            day1, day2 = selected_days[0], selected_days[1]
+    # Select two days for rank comparison
+    st.sidebar.header("Select Days")
+    selected_days = st.sidebar.multiselect("Select two days", unique_days)
 
-            # Calculate rank changes and player names between selected days
-            rank_changes, player_names = calculate_rank_changes(df, day1, day2)
-            changes_df = pd.DataFrame({'Player': player_names, 'Rank Change': rank_changes})
-            display_changes_df = changes_df.sort_values(by='Rank Change')
+    if len(selected_days) == 2:
+        day1, day2 = selected_days[0], selected_days[1]
 
-            # Reorder players and changes_df based on selected_players
-            selected_players = st.sidebar.multiselect("Select players", sorted(df['name'].unique()))
-            changes_df = changes_df[changes_df['Player'].isin(selected_players)]
-            changes_df.sort_values('Player', inplace=True)
-            player_names = changes_df['Player']
-            rank_changes = changes_df['Rank Change']
+        # Calculate rank changes and player names between selected days
+        rank_changes, player_names = calculate_rank_changes(df, day1, day2)
+        changes_df = pd.DataFrame({'Player': player_names, 'Rank Change': rank_changes})
+        display_changes_df = changes_df.sort_values(by='Rank Change')
 
-            st.header("Rank Changes")
-            st.write(display_changes_df)
+        # Reorder players and changes_df based on selected_players
+        selected_players = st.sidebar.multiselect("Select players", sorted(df['name'].unique()))
+        changes_df = changes_df[changes_df['Player'].isin(selected_players)]
+        changes_df.sort_values('Player', inplace=True)
+        player_names = changes_df['Player']
+        rank_changes = changes_df['Rank Change']
 
-            if selected_players:
-                # Plot rank changes for selected players
-                fig = plot_rank_changes(df, selected_players)
-                st.pyplot(fig)
+        st.header("Rank Changes")
+        st.write(display_changes_df)
 
-                # Download the plot as a PNG file
-                st.sidebar.header('To download plot right click and select "Save Image As..."')
-                #download = st.sidebar.button("Download PNG")
-                #if download:
-                    #img = io.BytesIO()
-                 #   plt.savefig("img.png", format='png', dpi=300)
-                    #img.seek(0)
-                  #  with open("img.png","rb") as plot:
-                      # btn = st.sidebar.download_button("Click here to download", data=plot, file_name="rank_changes.png", mime="image/png")
+        if selected_players:
+            # Plot rank changes for selected players
+            fig = plot_rank_changes(df, selected_players)
+            st.pyplot(fig)
+
+            # Download the plot as a PNG file
+            st.sidebar.header('To download plot right click and select "Save Image As..."')
 
 # Run the app
 if __name__ == '__main__':
