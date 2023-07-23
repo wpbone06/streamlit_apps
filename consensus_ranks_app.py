@@ -16,7 +16,8 @@ def calculate_rank_changes(df, day1, day2):
 def plot_rank_changes(df, players):
     selected_data = df[df['name'].isin(players)]
     selected_data = selected_data.pivot(index='Date', columns='name', values='rank')
-    selected_data.plot(marker='o')
+    ax = selected_data.plot(marker='o')
+    ax.set_xticklabels(pd.to_datetime(selected_data.index).strftime('%b-%d'))
     plt.xlabel('Date')
     plt.ylabel('rank')
     plt.title('Rank Changes for Selected Players')
