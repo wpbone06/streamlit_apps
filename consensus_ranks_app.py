@@ -32,7 +32,7 @@ def main():
     st.title("Player Rank Change Analyzer")
 
     # Get the path to the player CSV file
-    csv_file_path = "daily_consensus_ranks_2023-07-112023-07-27.csv"
+    csv_file_path = "daily_consensus_ranks_2023-07-112023-07-28.csv"
 
     # Read the CSV file into a DataFrame
     try:
