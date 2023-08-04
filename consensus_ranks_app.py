@@ -31,6 +31,7 @@ def plot_rank_changes(df, players):
 def main():
     st.title("Player Rank Change Analyzer")
 
+
     # Get the path to the player CSV file
     csv_file_path = "daily_consensus_ranks_2023-07-112023-08-04.csv"
 
