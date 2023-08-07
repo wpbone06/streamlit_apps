@@ -33,7 +33,7 @@ def main():
 
 
     # Get the path to the player CSV file
-    csv_file_path = "daily_consensus_ranks_2023-07-112023-08-06.csv"
+    csv_file_path = "daily_consensus_ranks_2023-07-112023-08-07.csv"
 
     # Read the CSV file into a DataFrame
     try:
